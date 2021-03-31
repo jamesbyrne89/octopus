@@ -1,5 +1,19 @@
+:root {
+  --gradient-color-one: #6d177c;
+  --gradient-color-two: #fc0174;
+}
+
 .App {
+  min-height: 100vh;
+  min-width: 100vw;
   text-align: center;
+  background: rgb(109, 23, 124);
+  background: linear-gradient(
+    90deg,
+    var(--gradient-color-one) 0%,
+    var(--gradient-color-two) 100%
+  );
+  color: white;
 }
 
 .App-logo {
@@ -14,8 +28,6 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
