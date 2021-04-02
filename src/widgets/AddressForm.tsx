@@ -2,35 +2,34 @@ import { useForm } from "react-hook-form";
 import TextInput from "../components/text-input/TextInput";
 import Button from "../components/button/Button";
 import { SelectedAddressData } from "../App";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewAddress } from "../actions";
+import { useEffect } from "react";
 
 interface AddressFormProps {
   addressData: SelectedAddressData;
 }
 
 const AddressForm = ({ addressData }: AddressFormProps) => {
-  console.log({ addressData });
-  const { register, handleSubmit, watch, control, errors } = useForm({
+  const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: addressData,
   });
 
-  console.log(watch());
-
-  const handlePostcodeSearch = (data: string) => {
-    console.log("Search for ", data);
+  const dispatch = useDispatch();
+  const timeAtAddress = useSelector((state: any) => state.timeAtAddress);
+  const onSubmit = (formData: any) => {
+    console.log({ timeAtAddress });
+    dispatch(addNewAddress({ ...formData, timeAtAddress }));
+    console.log({ formData });
   };
 
-  console.log({ errors });
+  useEffect(() => {
+    console.log({ addressData });
+    reset();
+  }, [addressData]);
 
   return (
-    <form
-      onSubmit={handleSubmit((formData) => {
-        console.log(formData);
-      })}
-    >
-      {/*  <div>
-
-      </div>
-      <SearchInput onSubmit={handlePostcodeSearch} /> */}
+    <form onSubmit={handleSubmit(onSubmit)}>
       <TextInput
         register={register({
           required: "Address line 1 is required",

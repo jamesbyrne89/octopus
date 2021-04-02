@@ -5,6 +5,10 @@ import "./App.css";
 import SearchInput from "./components/search/input/SearchInput";
 import Select from "./components/select/Select";
 import AddressForm from "./widgets/AddressForm";
+import { useDispatch } from "react-redux";
+import { setPostcode } from "./actions";
+import TimeAtAddressInput from "./widgets/TimeAtAddressInput";
+import AddressList from "./components/address-list/AddressList";
 
 export interface SelectedAddressData {
   addressLine1: string;
@@ -14,12 +18,6 @@ export interface SelectedAddressData {
   postcode: string;
 }
 
-const Flex = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-`;
-
 const Container = styled.main`
   padding: 2rem;
   width: 100%;
@@ -27,24 +25,28 @@ const Container = styled.main`
   margin: auto;
 `;
 
+const removeEmptyFields = (address: string) => {
+  return address
+    .split(",")
+    .filter((chunk: string) => chunk !== " ")
+    .join(",");
+};
+
+const VALID_UK_POSTCODE_REGEX = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
+
 function App() {
   const [addressMatches, setAddressMatches] = useState<
     { value: string; label: string }[] | null
   >(null);
-  const [timeAtAddress, setTimeAtAddress] = useState<any>(null);
+
   const [
     selectedAddress,
     setSelectedAddress,
   ] = useState<SelectedAddressData | null>(null);
 
-  const { register, handleSubmit, watch, control, errors } = useForm();
+  const dispatch = useDispatch();
 
-  const removeEmptyFields = (address: string) => {
-    return address
-      .split(",")
-      .filter((chunk: string) => chunk !== " ")
-      .join(",");
-  };
+  const { register, handleSubmit, watch, control, errors } = useForm();
 
   const getAddresses = (postcode = "sw46hs") => {
     console.log({ postcode });
@@ -61,7 +63,6 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         // Deal with data
-        console.log({ data });
         const formattedAddressMatches = data.addresses.map(
           (address: string) => ({
             value: `${address}, ${postcode.toUpperCase()}`,
@@ -75,17 +76,18 @@ function App() {
 
   const onSubmit = (postcode: string) => {
     const formattedPostcode = postcode.trim().split(" ").join("").toLowerCase();
+    dispatch(setPostcode(formattedPostcode));
     getAddresses(formattedPostcode);
   };
 
   const onAddressSelect = (address: { value: string; label: string }) => {
     console.log({ address });
-    const addressArr = address.value.split(",");
+    const addressArr = address.label.split(",");
     const [addressLine1, addressLine2, city] = addressArr;
     const formattedData: Omit<SelectedAddressData, "county" | "postcode"> = {
-      addressLine1,
-      addressLine2,
-      city,
+      addressLine1: addressLine1.trim(),
+      addressLine2: addressLine2.trim(),
+      city: city.trim(),
     };
     const postcode = watch("postcodeSearch");
     setSelectedAddress({ ...formattedData, postcode });
@@ -98,57 +100,8 @@ function App() {
         <h1>Address Search</h1>
 
         <h2>Please enter your address</h2>
-        <Flex>
-          <Controller
-            as={Select}
-            name="years"
-            onSelect={(d: any) => console.log(d)}
-            placeholder="Select years"
-            options={[
-              {
-                value: 0,
-                label: "0 years",
-              },
-              {
-                value: 1,
-                label: "1 year",
-              },
-              { value: 2, label: "2 years" },
-              { value: 3, label: "3 years" },
-              { value: 4, label: "4 years" },
-              { value: "5+", label: "5+ years" },
-            ]}
-            control={control}
-          />
-
-          <Controller
-            as={Select}
-            name="months"
-            onSelect={(d: any) => console.log(d)}
-            placeholder="Select months"
-            options={[
-              {
-                value: 0,
-                label: "0 months",
-              },
-              {
-                value: 1,
-                label: "1 month",
-              },
-              { value: 2, label: "2 months" },
-              { value: 3, label: "3 months" },
-              { value: 4, label: "4 months" },
-              { value: 5, label: "5 months" },
-              { value: 6, label: "6 months" },
-              { value: 7, label: "7 months" },
-              { value: 8, label: "8 months" },
-              { value: 9, label: "9 months" },
-              { value: 10, label: "10 months" },
-              { value: 11, label: "11 months" },
-            ]}
-            control={control}
-          />
-        </Flex>
+        <AddressList />
+        <TimeAtAddressInput />
         <form
           onSubmit={handleSubmit((formData) =>
             onSubmit(formData.postcodeSearch)
@@ -159,7 +112,7 @@ function App() {
             placeholder="Enter postcode"
             register={register({
               pattern: {
-                value: /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/,
+                value: VALID_UK_POSTCODE_REGEX,
                 message: "Please enter a valid postcode",
               },
             })}

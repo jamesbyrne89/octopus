@@ -11,7 +11,7 @@ const TextInputStyles = styled.div`
   }
 
   input {
-    background: transparent;
+    background: none;
     border: solid 1px white;
     line-height: 2.5;
     color: white;
