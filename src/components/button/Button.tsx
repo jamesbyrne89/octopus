@@ -15,6 +15,8 @@ const ButtonStyles = styled.button`
   cursor: pointer;
 `;
 
-const Button = ({ text }: ButtonProps) => <ButtonStyles>{text}</ButtonStyles>;
+const Button = ({ text }: ButtonProps) => (
+  <ButtonStyles data-testid="address-form-submit-btn">{text}</ButtonStyles>
+);
 
 export default Button;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { InputLabelStyles } from "../../../App";
-import magIcon from "../../../assets/magnifying-glass.png";
+import { InputLabelStyles } from "../../App";
+import magIcon from "../../assets/magnifying-glass.png";
 
 interface SearchInputProps {
   register: any;
@@ -70,10 +70,13 @@ const SearchInput = ({
             ref={register}
             name={name}
             placeholder={placeholder}
+            data-testid="postcode-search-input"
           />
           <button
+            type="submit"
             className="search-input__submit-btn"
             aria-label="Search by postcode"
+            data-testid="postcode-search-input-submit-btn"
           >
             <img alt="" src={magIcon} />
           </button>

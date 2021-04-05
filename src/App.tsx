@@ -27,7 +27,7 @@ export const InputLabelStyles = styled.label`
   }
 `;
 
-function App() {
+const App = () => {
   const selectedAddress = useAppSelector((state) => state.formData.address);
   return (
     <div className="App">
@@ -40,6 +40,6 @@ function App() {
       </Container>
     </div>
   );
-}
+};
 
 export default App;

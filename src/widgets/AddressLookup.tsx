@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setPostcode, setSelectedAddress } from "../actions";
 import Select from "../components/select/Select";
 import { InputLabelStyles } from "../App";
-import SearchInput from "../components/search/input/SearchInput";
+import SearchInput from "../components/search-input/SearchInput";
 import { useForm } from "react-hook-form";
+import { useAppSelector } from "../hooks";
 
+const ApiErrorStyles = styled.div`
+  margin-top: 1rem;
+`;
 export interface SelectedAddressData {
   addressLine1: string;
   addressLine2: string;
@@ -48,8 +53,19 @@ const AddressLookup = () => {
   const [apiError, setApiError] = useState(false);
 
   const dispatch = useDispatch();
+  const submittedPostcode = useAppSelector(
+    (state) => state?.formData?.address?.postcode
+  );
 
-  const { register, handleSubmit, errors, watch } = useForm();
+  const { register, handleSubmit, errors, watch, reset } = useForm();
+
+  useEffect(() => {
+    if (!submittedPostcode) {
+      reset({
+        postcodeSearch: submittedPostcode,
+      });
+    }
+  }, [submittedPostcode]);
 
   const getAddresses = (postcode = "") => {
     fetch(
@@ -70,8 +86,6 @@ const AddressLookup = () => {
         return res.json();
       })
       .then((data) => {
-        // Deal with data
-        console.log({ data });
         const formattedAddressMatches = data.addresses.map(
           (address: string) => ({
             value: formatAddressMatchValue(address),
@@ -94,6 +108,8 @@ const AddressLookup = () => {
     getAddresses(formattedPostcode);
   };
 
+  const postcode = watch("postcodeSearch");
+
   const onAddressSelect = (address: {
     value: {
       addressLine1: string;
@@ -103,12 +119,10 @@ const AddressLookup = () => {
     };
     label: string;
   }) => {
-    const postcode = watch("postcodeSearch");
     const formattedData: SelectedAddressData = {
       ...address.value,
       postcode: postcode.trim().toUpperCase(),
     };
-    console.log({ formattedData });
     dispatch(setSelectedAddress({ ...formattedData, postcode }));
   };
 
@@ -128,12 +142,20 @@ const AddressLookup = () => {
         />
       </form>
       {errors.postcodeSearch && <div>{errors.postcodeSearch.message}</div>}
-      {apiError && <div>Failed to fetch addresses</div>}
-      {addressMatches && !apiError && (
-        <div className="address-matches-dropdown-wrapper">
+      {apiError && (
+        <ApiErrorStyles data-testid="api-error-msg">
+          Failed to fetch addresses
+        </ApiErrorStyles>
+      )}
+      {postcode && addressMatches && !apiError && (
+        <div
+          className="address-matches-dropdown-wrapper"
+          data-testid="address-matches-dropdown-wrapper"
+        >
           <InputLabelStyles>
             <span>Address</span>
             <Select
+              placeholder="Select your address"
               name="address-matches"
               onSelect={onAddressSelect}
               options={addressMatches}

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import TextInput from "../components/text-input/TextInput";
 import Button from "../components/button/Button";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { addNewAddress } from "../actions";
+import { addNewAddress, clearFormData } from "../actions";
 import { useEffect } from "react";
 
 const AddressFormStyles = styled.form`
@@ -26,7 +26,7 @@ const AddressForm = () => {
     dispatch(
       addNewAddress({ ...formData, timeAtAddress: timeAtAddress || {} })
     );
-    console.log({ formData });
+    dispatch(clearFormData());
   };
 
   useEffect(() => {
@@ -34,8 +34,12 @@ const AddressForm = () => {
   }, [selectedAddress, reset]);
 
   return (
-    <AddressFormStyles onSubmit={handleSubmit(onSubmit)}>
+    <AddressFormStyles
+      onSubmit={handleSubmit(onSubmit)}
+      data-testid="address-form"
+    >
       <TextInput
+        testId="address-line-1-input"
         register={register({
           required: "Address line 1 is required",
         })}
@@ -44,13 +48,27 @@ const AddressForm = () => {
       />
       {errors.addressLine1 && <div>{errors.addressLine1.message}</div>}
       <TextInput
+        testId="address-line-2-input"
         register={register}
         name="addressLine2"
         label="Address line 2"
       />
-      <TextInput register={register} name="city" label="City*" />
-      <TextInput register={register} name="county" label="County" />
       <TextInput
+        testId="city-input"
+        register={register({
+          required: "City is required",
+        })}
+        name="city"
+        label="City*"
+      />
+      <TextInput
+        testId="county-input"
+        register={register}
+        name="county"
+        label="County"
+      />
+      <TextInput
+        testId="postcode-input"
         register={register({
           required: "Postcode is required",
         })}

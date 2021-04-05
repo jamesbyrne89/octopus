@@ -40,3 +40,7 @@ export const removeUserAddress = (id: string) => ({
   type: "REMOVE_USER_ADDRESS",
   payload: id,
 });
+
+export const clearFormData = () => ({
+  type: "CLEAR_FORM_DATA",
+});

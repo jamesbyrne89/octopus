@@ -22,14 +22,22 @@ interface TextInputProps {
   label: ReactNode;
   register: any;
   name?: string;
+  testId: string;
 }
 
-const TextInput = ({ placeholder, label, name, register }: TextInputProps) => {
+const TextInput = ({
+  placeholder,
+  label,
+  name,
+  register,
+  testId,
+}: TextInputProps) => {
   return (
     <TextInputStyles>
       <InputLabelStyles>
         <span>{label}</span>
         <input
+          data-testid={testId}
           type="text"
           name={name}
           ref={register}

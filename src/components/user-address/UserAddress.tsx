@@ -31,9 +31,10 @@ interface UserAddressProps {
 }
 
 const UserAddressItem = ({ address, onDelete }: UserAddressProps) => (
-  <UserAddressStyles>
+  <UserAddressStyles data-testid="user-address-item">
     <div className="user-address__header">
       <button
+        data-testid="delete-address-btn"
         type="button"
         aria-label="Remove address"
         onClick={() => onDelete(address.id)}

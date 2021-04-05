@@ -1,3 +1,5 @@
+import { AnyAction } from "redux";
+
 export interface UserAddress {
   id: string;
   timeAtAddress: { years: number; months: number };
@@ -27,7 +29,7 @@ const initialState: State = {
   formData: {},
 };
 
-export function formDataReducer(state = initialState, action: any) {
+export function formDataReducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case "SET_POSTCODE":
       return {
@@ -69,6 +71,11 @@ export function formDataReducer(state = initialState, action: any) {
       return {
         ...state,
         formData: { ...state.formData, address: action.payload },
+      };
+    case "CLEAR_FORM_DATA":
+      return {
+        ...state,
+        formData: {},
       };
 
     default:

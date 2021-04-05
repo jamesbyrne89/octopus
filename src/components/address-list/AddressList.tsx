@@ -8,8 +8,6 @@ const AddressList = () => {
   const dispatch = useAppDispatch();
 
   const deleteItem = (id: string) => {
-    console.log(id);
-    console.log(userAddresses);
     dispatch(removeUserAddress(id));
   };
 
