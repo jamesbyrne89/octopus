@@ -65,7 +65,7 @@ const AddressLookup = () => {
         postcodeSearch: submittedPostcode,
       });
     }
-  }, [submittedPostcode]);
+  }, [submittedPostcode, reset]);
 
   const getAddresses = (postcode = "") => {
     fetch(

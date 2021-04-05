@@ -9,3 +9,4 @@ I was limited in the time I could spend working on this test, so there are some 
 - Refactor some of the state management (e.g. multiple reducers)
 - Remove some global CSS styles and make CSS-in-JS styles more granular
 - Folder structure
+- Remove some 'any' types

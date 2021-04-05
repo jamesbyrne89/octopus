@@ -22,7 +22,14 @@ const AddressForm = () => {
     defaultValues: selectedAddress,
   });
 
-  const onSubmit = (formData: any) => {
+  const onSubmit = (formData: {
+    timeAtAddress?: { years?: number; months?: number };
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    county: string;
+    postcode: string;
+  }) => {
     dispatch(
       addNewAddress({ ...formData, timeAtAddress: timeAtAddress || {} })
     );

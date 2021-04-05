@@ -25,7 +25,7 @@ export const setMonthsAtAddress = (months: number) => ({
 });
 
 export const addNewAddress = (address: {
-  timeAtAddress: { years: number; months: number };
+  timeAtAddress: { years?: number; months?: number };
   addressLine1: string;
   addressLine2: string;
   city: string;
