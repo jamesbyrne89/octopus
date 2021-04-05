@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@types/react-select": "^4.0.14",
-    "@types/styled-components": "^5.1.9"
+    "@types/styled-components": "^5.1.9",
+    "msw": "^0.28.1"
   }
 }
