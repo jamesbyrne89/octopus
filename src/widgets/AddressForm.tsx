@@ -1,35 +1,40 @@
+import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import TextInput from "../components/text-input/TextInput";
 import Button from "../components/button/Button";
-import { SelectedAddressData } from "../App";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { addNewAddress } from "../actions";
 import { useEffect } from "react";
 
-interface AddressFormProps {
-  addressData: SelectedAddressData;
-}
+const AddressFormStyles = styled.form`
+  margin-top: 3rem;
 
-const AddressForm = ({ addressData }: AddressFormProps) => {
+  .address-form__submit-btn-wrapper {
+    margin-top: 3rem;
+  }
+`;
+
+const AddressForm = () => {
+  const selectedAddress = useAppSelector((state) => state.formData.address);
+  const timeAtAddress = useAppSelector((state) => state.formData.timeAtAddress);
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, errors, reset } = useForm({
-    defaultValues: addressData,
+    defaultValues: selectedAddress,
   });
 
-  const dispatch = useDispatch();
-  const timeAtAddress = useSelector((state: any) => state.timeAtAddress);
   const onSubmit = (formData: any) => {
-    console.log({ timeAtAddress });
-    dispatch(addNewAddress({ ...formData, timeAtAddress }));
+    dispatch(
+      addNewAddress({ ...formData, timeAtAddress: timeAtAddress || {} })
+    );
     console.log({ formData });
   };
 
   useEffect(() => {
-    console.log({ addressData });
-    reset();
-  }, [addressData]);
+    reset(selectedAddress);
+  }, [selectedAddress, reset]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <AddressFormStyles onSubmit={handleSubmit(onSubmit)}>
       <TextInput
         register={register({
           required: "Address line 1 is required",
@@ -53,8 +58,10 @@ const AddressForm = ({ addressData }: AddressFormProps) => {
         label="Postcode*"
       />
       {errors.postcode && <div>{errors.postcode.message}</div>}
-      <Button text="Add address" />
-    </form>
+      <div className="address-form__submit-btn-wrapper">
+        <Button text="Add Address" />
+      </div>
+    </AddressFormStyles>
   );
 };
 

@@ -46,7 +46,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-select": "^4.0.13",
+    "@types/react-select": "^4.0.14",
     "@types/styled-components": "^5.1.9"
   }
 }

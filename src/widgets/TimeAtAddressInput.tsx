@@ -3,10 +3,27 @@ import styled from "styled-components";
 import Select from "../components/select/Select";
 import { setYearsAtAddress, setMonthsAtAddress } from "../actions";
 
+const DropdownLabelStyles = styled.div`
+  margin-top: 2rem;
+  color: white;
+  text-align: left;
+
+  span {
+    font-size: 0.875rem;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.75rem;
+  }
+`;
+
 const Flex = styled.div`
   display: flex;
   justify-content: center;
   gap: 2rem;
+
+  > * {
+    flex-grow: 1;
+  }
 `;
 
 const YEAR_OPTIONS = [
@@ -48,18 +65,22 @@ const MONTH_OPTIONS = [
 const TimeAtAddressInput = () => {
   const dispatch = useDispatch();
 
-  const onSelectYears = (value: number) => {
+  const onSelectYears = (value = 0) => {
     dispatch(setYearsAtAddress(value));
   };
 
-  const onSelectMonths = (value: number) => {
+  const onSelectMonths = (value = 0) => {
     dispatch(setMonthsAtAddress(value));
   };
 
   return (
-    <div>
+    <>
+      <DropdownLabelStyles>
+        <span>How long have you lived at your current address?</span>
+      </DropdownLabelStyles>
       <Flex>
         <Select
+          name="years-at-address"
           onSelect={({ value, label }: { value: number; label: string }) =>
             onSelectYears(value)
           }
@@ -68,6 +89,7 @@ const TimeAtAddressInput = () => {
         />
 
         <Select
+          name="months-at-address"
           onSelect={({ value, label }: { value: number; label: string }) =>
             onSelectMonths(value)
           }
@@ -75,7 +97,7 @@ const TimeAtAddressInput = () => {
           options={MONTH_OPTIONS}
         />
       </Flex>
-    </div>
+    </>
   );
 };
 

@@ -3,6 +3,17 @@ export const setPostcode = (postcode: string) => ({
   payload: postcode,
 });
 
+export const setSelectedAddress = (address: {
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  county: string;
+  postcode: string;
+}) => ({
+  type: "SET_SELECTED_ADDRESS",
+  payload: address,
+});
+
 export const setYearsAtAddress = (years: number) => ({
   type: "SET_YEARS_AT_ADDRESS",
   payload: years,
@@ -23,4 +34,9 @@ export const addNewAddress = (address: {
 }) => ({
   type: "ADD_NEW_ADDRESS",
   payload: address,
+});
+
+export const removeUserAddress = (id: string) => ({
+  type: "REMOVE_USER_ADDRESS",
+  payload: id,
 });

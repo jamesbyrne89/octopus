@@ -1,23 +1,19 @@
 import { ReactNode } from "react";
 import styled from "styled-components";
+import { InputLabelStyles } from "../../App";
 
 const TextInputStyles = styled.div`
-  margin-top: 2rem;
-  color: white;
-  text-align: left;
-
-  span {
-    display: block;
-  }
+  margin-top: 1rem;
 
   input {
+    box-sizing: border-box;
     background: none;
     border: solid 1px white;
     line-height: 2.5;
     color: white;
     padding: 0 1rem;
-    margin-top: 1rem;
     width: 100%;
+    font-size: 0.875rem;
   }
 `;
 
@@ -31,7 +27,7 @@ interface TextInputProps {
 const TextInput = ({ placeholder, label, name, register }: TextInputProps) => {
   return (
     <TextInputStyles>
-      <label>
+      <InputLabelStyles>
         <span>{label}</span>
         <input
           type="text"
@@ -39,7 +35,7 @@ const TextInput = ({ placeholder, label, name, register }: TextInputProps) => {
           ref={register}
           placeholder={placeholder}
         />
-      </label>
+      </InputLabelStyles>
     </TextInputStyles>
   );
 };

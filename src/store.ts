@@ -1,13 +1,7 @@
-import { compose, createStore } from "redux";
+import { createStore } from "redux";
 import { formDataReducer } from "./reducers";
 
-const store = createStore(
-  formDataReducer
-  //   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-  //     trace: true, // (action) => { return ‘trace as string’; }
-  //     traceLimit: 25,
-  //   })
-);
+const store = createStore(formDataReducer);
 
 export default store;
 
