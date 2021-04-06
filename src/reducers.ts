@@ -55,6 +55,7 @@ export function formDataReducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         formData: {
+          ...state.formData,
           timeAtAddress: state.formData?.timeAtAddress,
           years: action.payload,
         },
@@ -63,6 +64,7 @@ export function formDataReducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         formData: {
+          ...state.formData,
           timeAtAddress: state.formData?.timeAtAddress,
           months: action.payload,
         },
