@@ -68,6 +68,7 @@ const AddressLookup = () => {
   }, [submittedPostcode, reset]);
 
   const getAddresses = (postcode = "") => {
+    setApiError(false);
     fetch(
       `https://api.getAddress.io/find/${postcode}?api-key=${process.env.REACT_APP_API_KEY}`,
       {
@@ -86,6 +87,10 @@ const AddressLookup = () => {
         return res.json();
       })
       .then((data) => {
+        if (!data?.addresses) {
+          setApiError(true);
+          return;
+        }
         const formattedAddressMatches = data.addresses.map(
           (address: string) => ({
             value: formatAddressMatchValue(address),
